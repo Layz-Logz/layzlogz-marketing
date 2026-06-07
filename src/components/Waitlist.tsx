@@ -8,6 +8,7 @@ export default function Waitlist() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setSubmitted(false)
     setSubmitError('')
     setSubmitting(true)
 
@@ -117,8 +118,12 @@ export default function Waitlist() {
           </button>
 
           {submitted && (
-            <p className="rounded-xl border border-white/45 bg-white/20 px-4 py-3 text-sm font-medium text-white">
-              You're on the list. We'll keep you posted.
+            <p
+              role="status"
+              aria-live="polite"
+              className="rounded-xl border border-white/55 bg-white/25 px-4 py-3 text-sm font-semibold text-white"
+            >
+              Success: You're on the list. We'll keep you posted.
             </p>
           )}
 
