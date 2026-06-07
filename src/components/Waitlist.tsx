@@ -3,10 +3,42 @@ import type { FormEvent } from 'react'
 
 export default function Waitlist() {
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setSubmitted(true)
+    setSubmitError('')
+    setSubmitting(true)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const payload = new URLSearchParams()
+
+    formData.forEach((value, key) => {
+      if (typeof value === 'string') {
+        payload.append(key, value)
+      }
+    })
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: payload.toString(),
+      })
+
+      if (!response.ok) {
+        throw new Error('Netlify form submission failed')
+      }
+
+      setSubmitted(true)
+      form.reset()
+    } catch {
+      setSubmitError('Submission failed. Please try again in a moment.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -78,14 +110,21 @@ export default function Waitlist() {
 
           <button
             type="submit"
+            disabled={submitting}
             className="w-full rounded-full bg-navy px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1b4463]"
           >
-            Join Waitlist
+            {submitting ? 'Submitting...' : 'Join Waitlist'}
           </button>
 
           {submitted && (
             <p className="rounded-xl border border-white/45 bg-white/20 px-4 py-3 text-sm font-medium text-white">
               You're on the list. We'll keep you posted.
+            </p>
+          )}
+
+          {submitError && (
+            <p className="rounded-xl border border-coral/50 bg-coral/20 px-4 py-3 text-sm font-medium text-white">
+              {submitError}
             </p>
           )}
 
