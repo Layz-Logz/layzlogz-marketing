@@ -11,6 +11,26 @@
     <title>LayZ LogZ | Your Personal Health Memory</title>
   </head>
   <body>
+    <form
+      name="layzlogz-waitlist"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="layzlogz-waitlist" />
+      <input name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <select name="role">
+        <option>Individual</option>
+        <option>Caregiver</option>
+        <option>Healthcare Professional</option>
+        <option>Investor</option>
+        <option>Other</option>
+      </select>
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
